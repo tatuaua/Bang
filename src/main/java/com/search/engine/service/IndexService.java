@@ -12,6 +12,7 @@ import java.util.Objects;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.search.engine.model.PageOccurrences;
 
 import jakarta.annotation.PostConstruct;
 
@@ -28,22 +29,38 @@ public class IndexService {
     }
 
     public void createIndex() throws IOException {
-        Map<String, Map<String, List<Integer>>> index = new HashMap<>();
+        Map<String, List<PageOccurrences>> index = new HashMap<>();
 
         File dir = new File(DIRECTORY_PATH);
-        for (File file : Objects.requireNonNull(dir.listFiles())) {
-            String content = Files.readString(file.toPath());
-            String[] words = content.split("\\W+"); // Split on non-word characters
+        
+        // for each word creates one object per page where it occurs and how many times
 
-            for (int i = 0; i < words.length; i++) {
-                String word = words[i].toLowerCase();
-                index.putIfAbsent(word, new HashMap<>());
-                index.get(word).putIfAbsent(file.getName(), new ArrayList<>());
-                index.get(word).get(file.getName()).add(i);
+        for (File file : Objects.requireNonNull(dir.listFiles())) {
+            String page = file.getName();
+            List<String> lines = Files.readAllLines(file.toPath());
+            for (String line : lines) {
+                String[] words = line.split("\\W+");
+                for (String word : words) {
+                    String key = word.toLowerCase();
+                    if (!index.containsKey(key)) {
+                        index.put(key, new ArrayList<>());
+                    }
+                    List<PageOccurrences> occurrences = index.get(key);
+                    boolean found = false;
+                    for (PageOccurrences pageOccurrences : occurrences) {
+                        if (pageOccurrences.getPage().equals(page)) {
+                            pageOccurrences.setOccurrences(pageOccurrences.getOccurrences() + 1);
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        occurrences.add(new PageOccurrences(page, 1));
+                    }
+                }
             }
         }
 
-        // Save index as JSON
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(new File(INDEX_FILE), index);
     }

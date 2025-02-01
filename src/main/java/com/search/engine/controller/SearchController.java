@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.search.engine.util.MapUtil;
+import com.search.engine.model.PageOccurrences;
 
 import static com.search.engine.util.Constants.*;
 
@@ -21,10 +22,11 @@ import static com.search.engine.util.Constants.*;
 public class SearchController {
 
     @GetMapping("/{query}")
-    public Map<String, List<Integer>> search(@PathVariable String query) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        @SuppressWarnings("unchecked")
-        Map<String, Map<String, List<Integer>>> index = mapper.readValue(new File(INDEX_FILE), Map.class);
-        return MapUtil.sort(index.getOrDefault(query.toLowerCase(), Collections.emptyMap()));
+    public List<PageOccurrences> search(@PathVariable String query) throws IOException {
+        Map<String, List<PageOccurrences>> index = new ObjectMapper().readValue(new File(INDEX_FILE), new TypeReference<Map<String, List<PageOccurrences>>>() {});
+        List<PageOccurrences> result = index.getOrDefault(query.toLowerCase(), Collections.emptyList());
+        result.sort((a, b) -> Integer.compare(b.getOccurrences(), a.getOccurrences()));
+        return result;
     }
+    
 }
