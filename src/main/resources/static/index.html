@@ -7,7 +7,10 @@
             let query = document.getElementById("query").value;
             let response = await fetch(`/search/${query}`);
             let data = await response.json();
-            document.getElementById("results").innerText = JSON.stringify(data, null, 2);
+
+            // display only the keys in the JSON response
+            
+            document.getElementById("results").innerText = Object.keys(data).join("\n");
         }
     </script>
 </head>

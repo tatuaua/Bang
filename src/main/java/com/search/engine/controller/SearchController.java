@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.search.engine.util.MapUtil;
 
 import static com.search.engine.util.Constants.*;
 
@@ -24,6 +25,6 @@ public class SearchController {
         ObjectMapper mapper = new ObjectMapper();
         @SuppressWarnings("unchecked")
         Map<String, Map<String, List<Integer>>> index = mapper.readValue(new File(INDEX_FILE), Map.class);
-        return index.getOrDefault(query.toLowerCase(), Collections.emptyMap());
+        return MapUtil.sort(index.getOrDefault(query.toLowerCase(), Collections.emptyMap()));
     }
 }
