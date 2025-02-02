@@ -5,7 +5,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 src/main/resources/input/*
-src/main/resources/static/index.json
+src/main/resources/index.db
 
 ### STS ###
 .apt_generated
