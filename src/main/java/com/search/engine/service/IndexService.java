@@ -65,6 +65,11 @@ public class IndexService {
             totalWords.addAndGet(words.length);
 
             for (String word : words) {
+
+                if (STOP_WORDS.contains(word)) {
+                    indexedWords.incrementAndGet();
+                    continue;
+                }
                 
                 Database.insertWordIfAbsent(word);
 
