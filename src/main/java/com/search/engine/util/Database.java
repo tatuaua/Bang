@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.text.similarity.LevenshteinDistance;
+
 import com.search.engine.model.PageOccurrences;
 
 public class Database {
@@ -147,6 +149,12 @@ public class Database {
 
         try {
             ResultSet resultSet = connection.createStatement().executeQuery(sql);
+
+            if (!resultSet.isBeforeFirst()) { // If word doesnt exist in our index, search for the closest word and return its top 5 documents
+                String lowestDistanceWord = getLowestDistanceWord(word);
+                return getTop5Documents(lowestDistanceWord);
+            }
+
             while (resultSet.next()) {
                 result.add(new PageOccurrences(resultSet.getString("document_name"), resultSet.getInt("total_occurrences")));
             }
@@ -154,5 +162,36 @@ public class Database {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static String getLowestDistanceWord(String word) {
+
+        String sql = """
+            SELECT w.word
+            FROM Words w;
+            """;
+
+        List<String> words = new ArrayList<>();
+        try {
+            ResultSet resultSet = connection.createStatement().executeQuery(sql);
+            while (resultSet.next()) {
+                words.add(resultSet.getString("word"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        LevenshteinDistance levenshteinDistance = LevenshteinDistance.getDefaultInstance();
+
+        int lowestDistance = Integer.MAX_VALUE;
+        String lowestDistanceWord = null;
+
+        for (String w : words) {
+            int distance = levenshteinDistance.apply(w, word);
+            if (distance <= lowestDistance) {
+                lowestDistanceWord = w;
+            }
+        }
+        return lowestDistanceWord;
     }
 }
