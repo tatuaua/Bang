@@ -5,7 +5,7 @@ This is a simple search engine built using Spring Boot. It indexes text files an
 # TODO
 
  - ~~Restructure index~~
- - Use SQLite instead of JSON
+ - ~~Use SQLite instead of JSON~~
  - Filter stop words
  - Levenshtein distance
  - Multi word search
