@@ -31,8 +31,8 @@ public class IndexService {
 
         File directory = new File(DIRECTORY_PATH);
         File[] files = directory.listFiles();
-        if (files == null) {
-            throw new RuntimeException("No files found in the directory");
+        if (files == null || files.length == 0) {
+            throw new RuntimeException("No files found in the input directory");
         }
 
         List<Word> wordList = new ArrayList<>();

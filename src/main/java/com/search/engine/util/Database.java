@@ -229,9 +229,12 @@ public class Database {
         for (String w : words) {
             int distance = levenshteinDistance.apply(w, word);
             if (distance <= lowestDistance) {
+                lowestDistance = distance;
                 lowestDistanceWord = w;
             }
         }
+
+        System.out.println("No exact match found for word: " + word + ". Closest match found: " + lowestDistanceWord);
         return lowestDistanceWord;
     }
 }
