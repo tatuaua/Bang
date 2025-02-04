@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
 import com.search.engine.model.PageOccurrences;
+import com.search.engine.model.Word;
 
 public class Database {
     
@@ -63,6 +64,45 @@ public class Database {
             for (String sql : sqlStatements) {
             connection.createStatement().execute(sql);
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void insertIndex(List<Word> index) {
+
+        List<String> words = index.stream().map(Word::getWord).toList();
+
+        batchInsertWords(words);
+
+        for (Word word : index) {
+            batchInsertOccurrences(word.getWord(), word.getPageOccurrences());
+        }
+    } 
+
+    public static void batchInsertOccurrences(String word, List<PageOccurrences> occurrences) {
+
+        try {
+            connection.setAutoCommit(false);
+            for (PageOccurrences occurrence : occurrences) {
+                insertPageOccurrences(word, occurrence.getPage(), occurrence.getOccurrences());
+            }
+            connection.commit();
+            connection.setAutoCommit(true);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void batchInsertWords(List<String> words) {
+
+        try {
+            connection.setAutoCommit(false);
+            for (String word : words) {
+                insertWordIfAbsent(word);
+            }
+            connection.commit();
+            connection.setAutoCommit(true);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
