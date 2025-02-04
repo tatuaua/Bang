@@ -11,3 +11,4 @@ This is a simple search engine built using Spring Boot. It indexes text files an
  - Multi word search
  - Performance testing
  - Performance improving
+ - Multithreading

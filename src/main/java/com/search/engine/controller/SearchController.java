@@ -19,6 +19,7 @@ public class SearchController {
     public List<PageOccurrences> search(@PathVariable String query) throws IOException {
         Database.open();
         List<PageOccurrences> result = Database.getTop5Documents(query);
+        Database.close();
         result.sort((a, b) -> Integer.compare(b.getOccurrences(), a.getOccurrences()));
         return result;
     }

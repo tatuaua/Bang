@@ -25,7 +25,7 @@ public class Database {
         }
     }
     
-    public static void closeConnection() {
+    public static void close() {
         try {
             connection.close();
         } catch (SQLException e) {

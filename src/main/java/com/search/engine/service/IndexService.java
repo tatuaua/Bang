@@ -29,8 +29,6 @@ public class IndexService {
 
     public void createIndex() throws IOException {
 
-        Database.init();
-
         File directory = new File(DIRECTORY_PATH);
         File[] files = directory.listFiles();
         if (files == null) {
@@ -78,8 +76,8 @@ public class IndexService {
             }
         }
 
+        Database.init();
         Database.insertIndex(wordList);
-
-        Database.closeConnection();
+        Database.close();
     }
 }
