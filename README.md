@@ -9,6 +9,7 @@ This is a simple search engine built using Spring Boot. It indexes text files an
  - ~~Filter stop words~~
  - ~~Levenshtein distance~~
  - Multi word search
+ - File upload
  - Performance testing
  - Performance improving
  - Multithreading
