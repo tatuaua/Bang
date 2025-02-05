@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.search.engine.service.FileService;
 
+/*
 @RestController
 @RequestMapping("/files")
 public class FileController {
@@ -23,3 +24,4 @@ public class FileController {
         fileService.insertFile(file);
     }
 }
+*/

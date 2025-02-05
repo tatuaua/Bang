@@ -5,10 +5,8 @@
     <script>
         async function search() {
             let query = document.getElementById("query").value;
-            let response = await fetch(`/search/${query}`);
+            let response = await fetch(`/search?q=${query.split(" ").join()}`, {method: 'POST'});
             let data = await response.json();
-            let results = data.map(obj => obj.page);
-            document.getElementById("results").innerText = results.join("\n");
         }
     </script>
 </head>
