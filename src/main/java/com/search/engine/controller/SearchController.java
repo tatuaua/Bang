@@ -29,11 +29,8 @@ public class SearchController {
 
     @GetMapping("/multiword")
     public List<Word> searchMultiWord(@RequestBody List<String> words) throws IOException {
-
         Database.open();
-
         List<Word> result = new ArrayList<>();
-        
         for(String word : words) {
             List<PageOccurrences> occurrences = Database.getTop5Documents(word);
             occurrences.sort((a, b) -> Integer.compare(b.getOccurrences(), a.getOccurrences()));
@@ -45,6 +42,4 @@ public class SearchController {
         Database.close();
         return result;
     }
-    
-    
 }
