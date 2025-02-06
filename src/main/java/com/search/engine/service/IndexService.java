@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.xml.crypto.Data;
+
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.search.engine.model.PageOccurrences;
 import com.search.engine.model.Word;
@@ -80,4 +83,56 @@ public class IndexService {
         Database.insertIndex(wordList);
         Database.close();
     }
+
+    /*public void updateIndex(MultipartFile multipartFile) {
+
+        List<Word> wordList = new ArrayList<>();
+        
+        String text = null;
+
+        try {
+            text = new String(multipartFile.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        String documentName = multipartFile.getOriginalFilename();
+        String[] words = text.split("\\s+");
+
+        for (String word : words) {
+            if (STOP_WORDS.contains(word)) {
+                continue;
+            }
+
+            Word existingWord = wordList.stream()
+                    .filter(w -> w.getWord().equals(word))
+                    .findFirst()
+                    .orElse(null);
+
+            if (Objects.isNull(existingWord)) {
+                Word newWord = new Word();
+                newWord.setWord(word);
+                newWord.addPageOccurrence(documentName);
+                wordList.add(newWord);
+
+            } else {
+                PageOccurrences existingPageOccurrences = existingWord.getPageOccurrences().stream()
+                        .filter(po -> po.getPage().equals(documentName))
+                        .findFirst()
+                        .orElse(null);
+
+                if (Objects.isNull(existingPageOccurrences)) {
+                    existingWord.addPageOccurrence(documentName);
+                } else {
+                    existingPageOccurrences.setOccurrences(existingPageOccurrences.getOccurrences() + 1);
+                }
+            }
+        }
+
+        Database.init();
+        Database.updateIndex(wordList);
+        Database.close();
+    }*/
+
+
 }
