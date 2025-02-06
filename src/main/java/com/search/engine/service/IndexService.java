@@ -20,7 +20,7 @@ public class IndexService {
         "the", "is", "in", "at", "of", "and", "a", "to"
     );
 
-    public void updateIndex(MultipartFile multipartFile) {
+    public void updateIndex(MultipartFile multipartFile) throws IOException {
 
         System.out.println("Updating index with file: " + multipartFile.getOriginalFilename());
 
@@ -28,12 +28,8 @@ public class IndexService {
         
         String text = null;
 
-        try {
-            text = new String(multipartFile.getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        text = new String(multipartFile.getBytes());
+        
         String documentName = multipartFile.getOriginalFilename();
         String[] words = text.split("\\s+");
 
