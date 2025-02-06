@@ -1,13 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Engine</title>
+    <style>
+        /* Dark Theme Styling */
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #181818;
+            color: #e0e0e0;
+            text-align: center;
+            padding: 50px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #ffffff;
+        }
+
+        input {
+            width: 60%;
+            padding: 12px;
+            font-size: 1rem;
+            background: #333;
+            border: 1px solid #555;
+            color: #fff;
+            border-radius: 8px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: #00bcd4;
+            box-shadow: 0 0 8px #00bcd4;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin-left: 10px;
+            font-size: 1rem;
+            background: #00bcd4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #0097a7;
+        }
+
+        pre {
+            width: 60%;
+            margin: 20px auto;
+            padding: 15px;
+            background: #222;
+            border-radius: 8px;
+            border-left: 5px solid #00bcd4;
+            font-size: 1rem;
+            text-align: left;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            min-height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search Engine</h1>
+    <input type="text" id="query" placeholder="Enter your search term...">
+    <button onclick="search()">Search</button>
+    <pre id="results">Results will appear here...</pre>
+
     <script>
         async function search() {
             let query = document.getElementById("query").value;
             let results = document.getElementById("results");
 
-            results.innerHTML = "";
+            results.innerHTML = "Searching...";
 
             if (!query || query.trim().length === 0) {
                 results.innerHTML = "Please enter a query.";
@@ -65,14 +136,6 @@
         function hasNonAlphanumeric(arr) {
             return arr.some(str => /[^a-zA-Z0-9]/.test(str));
         }
-
-
     </script>
-</head>
-<body>
-    <h1>Simple Search Engine</h1>
-    <input type="text" id="query">
-    <button onclick="search()">Search</button>
-    <pre id="results"></pre>
 </body>
 </html>

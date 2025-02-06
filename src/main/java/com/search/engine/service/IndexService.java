@@ -7,11 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.xml.crypto.Data;
-
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.search.engine.model.PageOccurrences;
 import com.search.engine.model.Word;
 import com.search.engine.util.Database;
@@ -47,6 +43,8 @@ public class IndexService {
             String documentName = file.getName();
             String text = Files.readString(file.toPath());
             String[] words = text.split("\\s+");
+            
+            List.of(words).forEach(s -> s = s.toLowerCase());
 
             for (String word : words) {
                 if (STOP_WORDS.contains(word)) {
@@ -80,7 +78,9 @@ public class IndexService {
         }
 
         Database.init();
+        System.out.println("Inserting index into database...");
         Database.insertIndex(wordList);
+        System.out.println("Index inserted successfully!");
         Database.close();
     }
 
