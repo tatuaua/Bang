@@ -1,7 +1,5 @@
 package com.search.engine.controller;
 
-import java.io.File;
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

@@ -14,6 +14,7 @@ import com.search.engine.model.Word;
 
 public class Database {
     
+    public static boolean INITIALIZED = false;
     private static final String URL = "jdbc:sqlite:src/main/resources/index.db";
     private static Connection connection;
     
@@ -38,6 +39,15 @@ public class Database {
     }
 
     public static void init() {
+
+        if (INITIALIZED) {
+            return;
+        }
+
+        System.out.println("Initializing database...");
+
+        INITIALIZED = true;
+
         connect();
 
         String[] sqlStatements = {
@@ -62,11 +72,15 @@ public class Database {
 
         try {
             for (String sql : sqlStatements) {
-            connection.createStatement().execute(sql);
+                connection.createStatement().execute(sql);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        System.out.println("Database initialized.");
+
+        close();
     }
 
     public static void insertIndex(List<Word> index) {
@@ -193,8 +207,13 @@ public class Database {
         try {
             ResultSet resultSet = connection.createStatement().executeQuery(sql);
 
-            if (!resultSet.isBeforeFirst()) { // If word doesnt exist in our index, search for the closest word and return its top 5 documents
-                String lowestDistanceWord = getLowestDistanceWord(word);
+            if (!resultSet.isBeforeFirst()) {
+
+                if (IsDatabaseEmpty()) { // If database is empty, return empty list
+                    return result;
+                }
+
+                String lowestDistanceWord = getLowestDistanceWord(word); // If word doesnt exist in our index, search for the closest word and return its top 5 documents
                 return getTop5Documents(lowestDistanceWord);
             }
 
@@ -202,6 +221,24 @@ public class Database {
                 result.add(new PageOccurrences(resultSet.getString("document_name"), resultSet.getInt("total_occurrences")));
             }
             return result;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static boolean IsDatabaseEmpty() {
+
+        String sql = """
+            SELECT COUNT(*) AS count
+            FROM Words;
+            """;
+
+        try {
+            ResultSet resultSet = connection.createStatement().executeQuery(sql);
+            if (resultSet.next()) {
+                return resultSet.getInt("count") == 0;
+            }
+            return true;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
