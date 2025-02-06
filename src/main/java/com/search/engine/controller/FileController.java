@@ -22,6 +22,6 @@ public class FileController {
 
     @PostMapping("/upload")
     public void uploadFile(@RequestParam MultipartFile file) {
-        //indexService.updateIndex(file);
+        indexService.updateIndex(file);
     }
 }

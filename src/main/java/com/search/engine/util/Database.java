@@ -80,6 +80,17 @@ public class Database {
         }
     } 
 
+    public static void updateIndex(List<Word> index) {
+        
+        List<String> words = index.stream().map(Word::getWord).toList();
+
+        batchInsertWords(words);
+
+        for (Word word : index) {
+            batchInsertOccurrences(word.getWord(), word.getPageOccurrences());
+        }
+    }
+
     public static void batchInsertOccurrences(String word, List<PageOccurrences> occurrences) {
 
         try {
@@ -122,6 +133,13 @@ public class Database {
         }
     }
 
+    public static void insertPageOccurrencesIfAbsent(String word, String documentName, int occurrences) {
+        
+        if (getPageOccurrences(word, documentName) == null) {
+            insertPageOccurrences(word, documentName, occurrences);
+        }
+    }
+
     public static void insertPageOccurrences(String word, String documentName, int occurrences) {
 
         String sql = String.format("""
@@ -132,21 +150,6 @@ public class Database {
                 %d
             );
             """, word, documentName, occurrences);
-        try {
-            connection.createStatement().execute(sql);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static void updatePageOccurrences(String word, String documentName, int occurrences) {
-
-        String sql = String.format("""
-            UPDATE Occurrences
-            SET occurrences = %d
-            WHERE word_id = (SELECT word_id FROM Words WHERE word = '%s')
-            AND document_name = '%s';
-            """, occurrences, word, documentName);
         try {
             connection.createStatement().execute(sql);
         } catch (SQLException e) {

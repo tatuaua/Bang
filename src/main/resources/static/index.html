@@ -73,6 +73,14 @@
     <button onclick="search()">Search</button>
     <pre id="results">Results will appear here...</pre>
 
+    <h2>Upload File</h2>
+    <div id="drop-area" ondragover="event.preventDefault()" ondrop="handleDrop(event)">
+        <p>Drag & drop a file here or click to upload</p>
+        <input type="file" id="file-input" onchange="uploadFile(event)" hidden>
+        <button onclick="document.getElementById('file-input').click()">Choose File</button>
+    </div>
+    <p id="upload-status"></p>
+
     <script>
         async function search() {
             let query = document.getElementById("query").value;
@@ -135,6 +143,43 @@
 
         function hasNonAlphanumeric(arr) {
             return arr.some(str => /[^a-zA-Z0-9]/.test(str));
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            let file = event.dataTransfer.files[0];
+            if (file) {
+                uploadFile({ target: { files: [file] } });
+            }
+        }
+
+        async function uploadFile(event) {
+            let file = event.target.files[0];
+            let status = document.getElementById("upload-status");
+
+            if (!file) {
+                status.innerHTML = "No file selected.";
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append("file", file);
+
+            try {
+                let response = await fetch("/files/upload", {
+                    method: "POST",
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Upload failed: ${response.status}`);
+                }
+
+                status.innerHTML = "File uploaded successfully!";
+            } catch (error) {
+                console.error("Upload error:", error);
+                status.innerHTML = "Error uploading file.";
+            }
         }
     </script>
 </body>

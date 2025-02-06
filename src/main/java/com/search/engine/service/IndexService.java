@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Objects;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.search.engine.model.PageOccurrences;
 import com.search.engine.model.Word;
 import com.search.engine.util.Database;
@@ -84,7 +86,9 @@ public class IndexService {
         Database.close();
     }
 
-    /*public void updateIndex(MultipartFile multipartFile) {
+    public void updateIndex(MultipartFile multipartFile) {
+
+        System.out.println("Updating index with file: " + multipartFile.getOriginalFilename());
 
         List<Word> wordList = new ArrayList<>();
         
@@ -98,6 +102,8 @@ public class IndexService {
 
         String documentName = multipartFile.getOriginalFilename();
         String[] words = text.split("\\s+");
+
+        List.of(words).forEach(s -> s = s.toLowerCase());
 
         for (String word : words) {
             if (STOP_WORDS.contains(word)) {
@@ -129,10 +135,10 @@ public class IndexService {
             }
         }
 
-        Database.init();
+        Database.open();
         Database.updateIndex(wordList);
         Database.close();
-    }*/
+    }
 
 
 }
