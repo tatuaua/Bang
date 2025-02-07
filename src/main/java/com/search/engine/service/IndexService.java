@@ -9,7 +9,6 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.search.engine.model.PageOccurrences;
 import com.search.engine.model.Word;
 import com.search.engine.repository.DatabaseRepository;
 
@@ -29,15 +28,19 @@ public class IndexService {
     public void updateIndex(MultipartFile multipartFile) throws IOException {
 
         System.out.println("Updating index with file: " + multipartFile.getOriginalFilename());
-
-        List<Word> wordList = new ArrayList<>();
         
         String text = null;
 
-        text = new String(multipartFile.getBytes());
-        
+        try {
+            text = new String(multipartFile.getBytes());
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Failed to read file content");
+        }
+
         String documentName = multipartFile.getOriginalFilename();
         String[] words = text.split("\\s+");
+
+        List<Word> wordList = new ArrayList<>();
 
         for (int i = 0; i < words.length; i++) {
 
@@ -59,16 +62,8 @@ public class IndexService {
                 wordList.add(newWord);
 
             } else {
-                PageOccurrences existingPageOccurrences = existingWord.getPageOccurrences().stream()
-                        .filter(po -> po.getPage().equals(documentName))
-                        .findFirst()
-                        .orElse(null);
-
-                if (Objects.isNull(existingPageOccurrences)) {
-                    existingWord.addPageOccurrence(documentName);
-                } else {
-                    existingPageOccurrences.setOccurrences(existingPageOccurrences.getOccurrences() + 1);
-                }
+                
+                existingWord.updatePageOccurrence(documentName);
             }
         }
 
@@ -76,6 +71,4 @@ public class IndexService {
         databaseRepository.updateIndex(wordList);
         databaseRepository.close();
     }
-
-
 }

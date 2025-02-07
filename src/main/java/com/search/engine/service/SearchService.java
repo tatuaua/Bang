@@ -32,5 +32,4 @@ public class SearchService {
         databaseRepository.close();
         return result;
     }
-    
 }

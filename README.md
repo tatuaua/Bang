@@ -21,6 +21,18 @@ This project tries to follow the MVC pattern
 - Java 17
 - Maven
 
+### Running tests:
+
+```bash
+mvn test
+```
+
+or
+
+```bash
+./mvnw test
+```
+
 ### Running the application:
 
 ```bash
