@@ -38,7 +38,16 @@ public class IndexService {
         }
 
         String documentName = multipartFile.getOriginalFilename();
-        String[] words = text.split("\\s+");
+
+        String cleanText = text.replace("\n", " ");
+        
+        // Remove all non-word characters except spaces
+        cleanText = cleanText.replaceAll("[^\\w\\s]", "");
+        
+        // Replace multiple spaces with a single space
+        cleanText = cleanText.replaceAll("\\s+", " ").trim();
+
+        String[] words = cleanText.split(" ");
 
         List<Word> wordList = new ArrayList<>();
 
