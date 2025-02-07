@@ -57,6 +57,8 @@ Steps:
 - SQLite (for storing the index)
 - Lombok (for reducing boilerplate code)
 - Maven (for building the project)
+- JUnit + Mockito (for testing)
+- Docker (for containerization)
 - HTML, CSS, JavaScript (for the front-end)
 
 ## Indexing strategy
