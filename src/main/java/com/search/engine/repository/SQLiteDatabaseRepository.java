@@ -17,7 +17,13 @@ import com.search.engine.model.Word;
 public class SQLiteDatabaseRepository implements DatabaseRepository {
 
     public static boolean INITIALIZED = false;
-    private static final String URL = "jdbc:sqlite:src/main/resources/index.db";
+
+    private static final String DEFAULT_DB_PATH = "jdbc:sqlite:src/main/resources/index.db";
+    private static final String ENV_DB_PATH = System.getenv("SPRING_DATASOURCE_URL");
+    private static final String URL = ENV_DB_PATH != null 
+            ? ENV_DB_PATH
+            : DEFAULT_DB_PATH;
+
     private static Connection connection;
     
     private void connect() {
