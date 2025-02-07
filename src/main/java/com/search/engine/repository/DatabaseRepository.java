@@ -9,8 +9,7 @@ public interface DatabaseRepository {
     void close();
     void init();
     
-    void insertIndex(List<Word> index);
-    void updateIndex(List<Word> index);
+    void upsertIndex(List<Word> index);
     
     void insertWordIfAbsent(String word);
     void insertPageOccurrencesIfAbsent(String word, String documentName, int occurrences);

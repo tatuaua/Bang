@@ -77,7 +77,7 @@ public class IndexService {
         }
 
         databaseRepository.open();
-        databaseRepository.updateIndex(wordList);
+        databaseRepository.upsertIndex(wordList);
         databaseRepository.close();
     }
 }

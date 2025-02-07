@@ -91,18 +91,7 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
         close();
     }
 
-    public void insertIndex(List<Word> index) {
-
-        List<String> words = index.stream().map(Word::getWord).toList();
-
-        batchInsertWords(words);
-
-        for (Word word : index) {
-            batchInsertOccurrences(word.getWord(), word.getPageOccurrences());
-        }
-    } 
-
-    public void updateIndex(List<Word> index) {
+    public void upsertIndex(List<Word> index) {
         
         List<String> words = index.stream().map(Word::getWord).toList();
 

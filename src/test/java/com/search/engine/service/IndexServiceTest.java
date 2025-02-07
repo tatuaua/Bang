@@ -57,7 +57,7 @@ public class IndexServiceTest {
         indexService.updateIndex(multipartFile);
 
         verify(databaseRepository).open();
-        verify(databaseRepository).updateIndex(captor.capture());
+        verify(databaseRepository).upsertIndex(captor.capture());
 
         List<Word> capturedArgument = captor.getValue();
 
@@ -90,7 +90,7 @@ public class IndexServiceTest {
         indexService.updateIndex(multipartFile);
 
         verify(databaseRepository).open();
-        verify(databaseRepository).updateIndex(captor.capture());
+        verify(databaseRepository).upsertIndex(captor.capture());
 
         List<Word> capturedArgument = captor.getValue();
 
