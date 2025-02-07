@@ -52,6 +52,20 @@ or
 
 The search engine indexes the text files by splitting the text into words and storing the words in a SQLite database along with the file name and occurrence amount of the word in the file. This allows for quick searching of words within the files. A stop words list is used to filter out common words that do not add value to the search results. In the case that a word is not found in the index, the search engine will return the closest matching word based on the Levenshtein distance. A significant weakness of the indexing strategy is that positional data is not stored, so word sequences cannot be searched for. Multi word search is supported by searching for each word individually and then combining the results.
 
+Index structure:
+
+```
+{
+    "someword": {
+        "somefile.txt": 3,
+        "otherfile.txt": 1
+    },
+    "anotherword": {
+        "somefile.txt": 1
+    }
+}
+```
+
 ## Architecture diagram
 
 ![Architecture diagram](images/search2.png)
