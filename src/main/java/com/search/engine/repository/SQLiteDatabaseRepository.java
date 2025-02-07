@@ -1,4 +1,4 @@
-package com.search.engine.util;
+package com.search.engine.repository;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,17 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.text.similarity.LevenshteinDistance;
+import org.springframework.stereotype.Repository;
 
 import com.search.engine.model.PageOccurrences;
 import com.search.engine.model.Word;
 
-public class Database {
-    
+@Repository
+public class SQLiteDatabaseRepository implements DatabaseRepository {
+
     public static boolean INITIALIZED = false;
     private static final String URL = "jdbc:sqlite:src/main/resources/index.db";
     private static Connection connection;
     
-    private static void connect() {
+    private void connect() {
         try {
            connection = DriverManager.getConnection(URL);
         } catch (SQLException e) {
@@ -26,7 +28,7 @@ public class Database {
         }
     }
     
-    public static void close() {
+    public void close() {
         try {
             connection.close();
         } catch (SQLException e) {
@@ -34,11 +36,11 @@ public class Database {
         }
     }
 
-    public static void open() {
+    public void open() {
         connect();
     }
 
-    public static void init() {
+    public void init() {
 
         if (INITIALIZED) {
             return;
@@ -83,7 +85,7 @@ public class Database {
         close();
     }
 
-    public static void insertIndex(List<Word> index) {
+    public void insertIndex(List<Word> index) {
 
         List<String> words = index.stream().map(Word::getWord).toList();
 
@@ -94,7 +96,7 @@ public class Database {
         }
     } 
 
-    public static void updateIndex(List<Word> index) {
+    public void updateIndex(List<Word> index) {
         
         List<String> words = index.stream().map(Word::getWord).toList();
 
@@ -105,7 +107,7 @@ public class Database {
         }
     }
 
-    public static void batchInsertOccurrences(String word, List<PageOccurrences> occurrences) {
+    public void batchInsertOccurrences(String word, List<PageOccurrences> occurrences) {
 
         try {
             connection.setAutoCommit(false);
@@ -119,7 +121,7 @@ public class Database {
         }
     }
 
-    public static void batchInsertWords(List<String> words) {
+    public void batchInsertWords(List<String> words) {
 
         try {
             connection.setAutoCommit(false);
@@ -133,7 +135,7 @@ public class Database {
         }
     }
 
-    public static void insertWordIfAbsent(String word) {
+    public void insertWordIfAbsent(String word) {
 
         String sql = String.format("""
             INSERT INTO Words (word)
@@ -147,14 +149,14 @@ public class Database {
         }
     }
 
-    public static void insertPageOccurrencesIfAbsent(String word, String documentName, int occurrences) {
+    public void insertPageOccurrencesIfAbsent(String word, String documentName, int occurrences) {
         
         if (getPageOccurrences(word, documentName) == null) {
             insertPageOccurrences(word, documentName, occurrences);
         }
     }
 
-    public static void insertPageOccurrences(String word, String documentName, int occurrences) {
+    public void insertPageOccurrences(String word, String documentName, int occurrences) {
 
         String sql = String.format("""
             INSERT INTO Occurrences (word_id, document_name, occurrences)
@@ -171,7 +173,7 @@ public class Database {
         }
     }
 
-    public static PageOccurrences getPageOccurrences(String word, String documentName) {
+    public PageOccurrences getPageOccurrences(String word, String documentName) {
 
         String sql = String.format("""
             SELECT occurrences
@@ -190,7 +192,7 @@ public class Database {
         }
     }
 
-    public static List<PageOccurrences> getTop5Documents(String word) {
+    public List<PageOccurrences> getTop5Documents(String word) {
 
         String sql = String.format("""
             SELECT o.document_name, SUM(o.occurrences) AS total_occurrences
@@ -226,7 +228,7 @@ public class Database {
         }
     }
 
-    private static boolean IsDatabaseEmpty() {
+    private boolean IsDatabaseEmpty() {
 
         String sql = """
             SELECT COUNT(*) AS count
@@ -244,7 +246,7 @@ public class Database {
         }
     }
 
-    private static String getLowestDistanceWord(String word) {
+    private String getLowestDistanceWord(String word) {
 
         String sql = """
             SELECT w.word
@@ -277,4 +279,5 @@ public class Database {
         System.out.println("No exact match found for word: " + word + ". Closest match found: " + lowestDistanceWord);
         return lowestDistanceWord;
     }
+    
 }

@@ -7,23 +7,29 @@ import org.springframework.stereotype.Service;
 
 import com.search.engine.model.PageOccurrences;
 import com.search.engine.model.Word;
-import com.search.engine.util.Database;
+import com.search.engine.repository.DatabaseRepository;
 
 @Service
 public class SearchService {
 
+    DatabaseRepository databaseRepository;
+
+    public SearchService(DatabaseRepository databaseRepository) {
+        this.databaseRepository = databaseRepository;
+    }
+
     public List<Word> getTop5Documents(List<String> words) {
         List<Word> result = new ArrayList<>();
-        Database.open();
+        databaseRepository.open();
         for(String word : words) {
-            List<PageOccurrences> occurrences = Database.getTop5Documents(word);
+            List<PageOccurrences> occurrences = databaseRepository.getTop5Documents(word);
             occurrences.sort((a, b) -> Integer.compare(b.getOccurrences(), a.getOccurrences()));
             Word newWord = new Word();
             newWord.setWord(word);
             newWord.setPageOccurrences(occurrences);
             result.add(newWord);
         }
-        Database.close();
+        databaseRepository.close();
         return result;
     }
     

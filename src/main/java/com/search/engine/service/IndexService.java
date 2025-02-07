@@ -11,10 +11,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.search.engine.model.PageOccurrences;
 import com.search.engine.model.Word;
-import com.search.engine.util.Database;
+import com.search.engine.repository.DatabaseRepository;
 
 @Service
 public class IndexService {
+
+    DatabaseRepository databaseRepository;
+
+    public IndexService(DatabaseRepository databaseRepository) {
+        this.databaseRepository = databaseRepository;
+    }
 
     private static final Set<String> STOP_WORDS = Set.of(
         "the", "is", "in", "at", "of", "and", "a", "to"
@@ -66,9 +72,9 @@ public class IndexService {
             }
         }
 
-        Database.open();
-        Database.updateIndex(wordList);
-        Database.close();
+        databaseRepository.open();
+        databaseRepository.updateIndex(wordList);
+        databaseRepository.close();
     }
 
 
