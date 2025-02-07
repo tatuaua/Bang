@@ -10,44 +10,43 @@ This project tries to follow the MVC pattern
 
 ```src/main/resources/static/index.html``` contains the front-end code
 
+```src/test/java/com/search/engine``` contains tests for the back-end code
+
 ## Getting started 
 
-### Prerequisites for running:
+Note: The application uses port 8080, so make sure that port is available before running the application.
 
-- TODO
+### Building the application (with Docker):
 
-### Pre-requisites for building:
+Prerequisites:
+
+- Docker
+
+Steps:
+
+- Clone the repository
+- Open a terminal and navigate to the project directory (where this file is located)
+- Make sure the Docker engine is running
+- Run ```docker-compose up --build -d``` to build and test the application
+- The application will be available at ```http://localhost:8080``` after the build is complete
+
+### Building the application (without Docker):
+
+Prerequisites:
 
 - Java 17
 - Maven
 
-### Running tests:
+Steps:
 
-```bash
-mvn test
-```
-
-or
-
-```bash
-./mvnw test
-```
-
-### Running the application:
-
-```bash
-mvn spring-boot:run
-```
-
-or
-
-```bash
-./mvnw spring-boot:run
-```
+- Clone the repository
+- Open a terminal and navigate to the project directory (where this file is located)
+- Run ```./mvnw clean install``` to build the application
+- Run ```java -jar target/engine-0.0.1-SNAPSHOT.jar``` to start the application
 
 ### Using the application:
 
-- Open a browser and navigate to ```http://localhost:8000```
+- Open a browser and navigate to ```http://localhost:8080```
 - Click on the "Choose File" button and select a text file to upload
 - Enter a word to search for in the search bar and click on the "Search" button
 - The search results will be displayed below the search bar
