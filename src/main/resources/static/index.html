@@ -189,6 +189,8 @@
             formData.append("file", file);
 
             try {
+                status.innerHTML = "Uploading file...";
+                
                 let response = await fetch("/files/upload", {
                     method: "POST",
                     body: formData
