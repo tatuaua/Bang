@@ -36,15 +36,12 @@ public class IndexService {
 
         String documentName = multipartFile.getOriginalFilename();
 
-        String cleanText = text.replace("\n", " ");
-        
-        // Remove all non-word characters except spaces
-        cleanText = cleanText.replaceAll("[^\\w\\s]", "");
-        
-        // Replace multiple spaces with a single space
-        cleanText = cleanText.replaceAll("\\s+", " ").trim();
+        text = text.replace("\n", " ")
+                            .replaceAll("[^\\w\\s]", "")
+                            .replaceAll("\\s+", " ")
+                            .trim();
 
-        String[] words = cleanText.split(" ");
+        String[] words = text.split(" ");
 
         List<Word> wordList = new ArrayList<>();
 
@@ -66,15 +63,12 @@ public class IndexService {
                 newWord.setWord(word);
                 newWord.addPageOccurrence(documentName);
                 wordList.add(newWord);
-
             } else {
-                
                 existingWord.updatePageOccurrence(documentName);
             }
         }
 
         databaseRepository.upsertIndex(wordList);
-
         System.out.println("Index updated with file: " + multipartFile.getOriginalFilename());
     }
 }
