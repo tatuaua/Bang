@@ -91,8 +91,8 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
         close();
     }
 
-    public void upsertIndex(List<Word> index) {
-        
+    public synchronized void upsertIndex(List<Word> index) {
+        open();
         List<String> words = index.stream().map(Word::getWord).toList();
 
         batchInsertWords(words);
@@ -100,6 +100,7 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
         for (Word word : index) {
             batchInsertOccurrences(word.getWord(), word.getPageOccurrences());
         }
+        close();
     }
 
     public void batchInsertOccurrences(String word, List<PageOccurrences> occurrences) {

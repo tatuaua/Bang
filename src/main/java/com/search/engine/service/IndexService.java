@@ -73,9 +73,7 @@ public class IndexService {
             }
         }
 
-        databaseRepository.open();
         databaseRepository.upsertIndex(wordList);
-        databaseRepository.close();
 
         System.out.println("Index updated with file: " + multipartFile.getOriginalFilename());
     }
