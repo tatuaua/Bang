@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.search.engine.model.Word;
 import com.search.engine.repository.DatabaseRepository;
+import static com.search.engine.util.Constants.STOP_WORDS;
 
 public class IndexServiceTest {
 
@@ -69,12 +70,13 @@ public class IndexServiceTest {
 
     @Test
     public void testUpdateIndexWithStopWords() throws IOException {
-        
-        String content = "the string is a test document";
+
+        String stopWord = STOP_WORDS.toArray()[0].toString();
+        String content = String.format("{} string is a test document", stopWord);
         String fileName = "stopWordsDocument.txt";
 
         Word wordThatShouldNotExist = new Word();
-        wordThatShouldNotExist.setWord("the");
+        wordThatShouldNotExist.setWord(stopWord);
         wordThatShouldNotExist.addPageOccurrence(fileName);
 
         Word wordThatShouldExist = new Word();

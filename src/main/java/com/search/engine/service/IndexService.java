@@ -4,13 +4,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.search.engine.model.Word;
 import com.search.engine.repository.DatabaseRepository;
+
+import static com.search.engine.util.Constants.STOP_WORDS;
 
 @Service
 public class IndexService {
@@ -20,10 +21,6 @@ public class IndexService {
     public IndexService(DatabaseRepository databaseRepository) {
         this.databaseRepository = databaseRepository;
     }
-
-    private static final Set<String> STOP_WORDS = Set.of(
-        "the", "is", "in", "at", "of", "and", "a", "to"
-    );
 
     public void updateIndex(MultipartFile multipartFile) throws IOException {
 
