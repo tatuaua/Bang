@@ -91,8 +91,5 @@ Index structure:
  - ~~Levenshtein distance~~
  - ~~Multi word search~~
  - ~~File upload~~
- - UI improvements
- - Containerization
- - Performance testing
- - Performance improving
- - Multithreading
+ - ~~UI improvements~~
+ - ~~Containerization~~
