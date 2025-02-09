@@ -1,4 +1,4 @@
-# Search Engine
+# Bang - search engine
 
 This is a simple search engine built using Spring Boot. It indexes text files and allows searching for words within those files.
 
@@ -11,6 +11,8 @@ This project tries to follow the MVC pattern
 ```src/main/resources/static/index.html``` contains the front-end code
 
 ```src/test/java/com/search/engine``` contains tests for the back-end code
+
+```get_data.py``` contains a script you can use to get some text files from wikipedia
 
 ## Getting started 
 
@@ -27,7 +29,7 @@ Steps:
 - Clone the repository
 - Open a terminal and navigate to the project directory (where this file is located)
 - Make sure the Docker engine is running
-- Run ```docker-compose up --build -d``` to build and test the application
+- Run ```docker-compose up --build -d```
 - The application will be available at ```http://localhost:8080``` after the build is complete
 
 ### Building the application (without Docker):
