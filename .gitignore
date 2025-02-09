@@ -6,6 +6,7 @@ target/
 !**/src/test/**/target/
 src/main/resources/input/*
 src/main/resources/index.db
+data/
 
 ### STS ###
 .apt_generated
