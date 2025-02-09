@@ -19,8 +19,5 @@ jobs:
           docker build . --file Dockerfile
           docker compose up -d  # Run in detached mode
 
-      - name: Wait for application to start
-        run: sleep 20
-
       - name: Stop and remove containers
         run: docker compose down
