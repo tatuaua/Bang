@@ -18,3 +18,7 @@ jobs:
         run: |
           docker build . --file Dockerfile
           docker compose up
+
+      - name: Stop services
+        if: always()
+        run: docker-compose down
