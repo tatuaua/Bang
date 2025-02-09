@@ -1,4 +1,4 @@
-package com.search.engine.util;
+package com.search.bang.util;
 
 import java.util.Set;
 

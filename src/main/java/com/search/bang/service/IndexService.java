@@ -1,17 +1,16 @@
-package com.search.engine.service;
+package com.search.bang.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.search.engine.model.Word;
-import com.search.engine.repository.DatabaseRepository;
+import com.search.bang.model.Word;
+import com.search.bang.repository.DatabaseRepository;
 
-import static com.search.engine.util.Constants.STOP_WORDS;
+import static com.search.bang.util.Constants.STOP_WORDS;
 
 @Service
 public class IndexService {

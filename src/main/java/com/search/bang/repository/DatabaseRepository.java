@@ -1,7 +1,7 @@
-package com.search.engine.repository;
+package com.search.bang.repository;
 
-import com.search.engine.model.PageOccurrences;
-import com.search.engine.model.Word;
+import com.search.bang.model.PageOccurrences;
+import com.search.bang.model.Word;
 import java.util.List;
 
 public interface DatabaseRepository {

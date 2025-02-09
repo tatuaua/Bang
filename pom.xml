@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.search</groupId>
-	<artifactId>engine</artifactId>
+	<artifactId>bang</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>engine</name>
+	<name>bang</name>
 	<description>Search engine using Spring boot</description>
 	<url/>
 	<licenses>

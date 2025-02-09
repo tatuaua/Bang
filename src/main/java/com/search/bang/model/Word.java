@@ -1,4 +1,4 @@
-package com.search.engine.model;
+package com.search.bang.model;
 
 import java.util.ArrayList;
 import java.util.List;

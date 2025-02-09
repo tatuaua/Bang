@@ -1,4 +1,4 @@
-package com.search.engine.repository;
+package com.search.bang.repository;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,8 +10,8 @@ import java.util.List;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.springframework.stereotype.Repository;
 
-import com.search.engine.model.PageOccurrences;
-import com.search.engine.model.Word;
+import com.search.bang.model.PageOccurrences;
+import com.search.bang.model.Word;
 
 @Repository
 public class SQLiteDatabaseRepository implements DatabaseRepository {
@@ -256,8 +256,7 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
 
     private ResultSet executeQuery(String sql) {
         try {
-            ResultSet result = connection.createStatement().executeQuery(sql);
-            return result;
+            return connection.createStatement().executeQuery(sql);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -1,13 +1,13 @@
-package com.search.engine.service;
+package com.search.bang.service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.search.engine.model.PageOccurrences;
-import com.search.engine.model.Word;
-import com.search.engine.repository.DatabaseRepository;
+import com.search.bang.model.PageOccurrences;
+import com.search.bang.model.Word;
+import com.search.bang.repository.DatabaseRepository;
 
 @Service
 public class SearchService {

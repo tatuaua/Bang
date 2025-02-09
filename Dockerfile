@@ -11,7 +11,7 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-COPY --from=builder /app/target/engine-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=builder /app/target/bang-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8080
 

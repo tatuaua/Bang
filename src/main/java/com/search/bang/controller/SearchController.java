@@ -1,4 +1,4 @@
-package com.search.engine.controller;
+package com.search.bang.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.search.engine.model.Word;
-import com.search.engine.service.SearchService;
+import com.search.bang.model.Word;
+import com.search.bang.service.SearchService;
 
 @RestController
 @RequestMapping("/search")

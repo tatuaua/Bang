@@ -1,4 +1,4 @@
-package com.search.engine.model;
+package com.search.bang.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
