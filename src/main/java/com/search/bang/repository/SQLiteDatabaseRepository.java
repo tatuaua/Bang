@@ -34,7 +34,7 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
         }
     }
 
-    public void close() {
+    private void close() {
         try {
             connection.close();
         } catch (SQLException e) {
@@ -100,7 +100,7 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
         close();
     }
 
-    public void batchInsertOccurrences(String word, List<PageOccurrences> occurrences) {
+    private void batchInsertOccurrences(String word, List<PageOccurrences> occurrences) {
 
         try {
             connection.setAutoCommit(false);
@@ -114,7 +114,7 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
         }
     }
 
-    public void batchInsertWords(List<String> words) {
+    private void batchInsertWords(List<String> words) {
 
         try {
             connection.setAutoCommit(false);
@@ -128,7 +128,7 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
         }
     }
 
-    public void insertWordIfAbsent(String word) {
+    private void insertWordIfAbsent(String word) {
 
         String sql = String.format("""
                 INSERT INTO Words (word)
@@ -142,7 +142,7 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
         }
     }
 
-    public void insertPageOccurrences(String word, String documentName, int occurrences) {
+    private void insertPageOccurrences(String word, String documentName, int occurrences) {
 
         String sql = String.format("""
                 INSERT INTO Occurrences (word_id, document_name, occurrences)
