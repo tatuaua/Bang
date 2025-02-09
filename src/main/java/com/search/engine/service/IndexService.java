@@ -58,7 +58,7 @@ public class IndexService {
                     .findFirst()
                     .orElse(null);
 
-            if (Objects.isNull(existingWord)) {
+            if (existingWord == null) {
                 Word newWord = new Word();
                 newWord.setWord(word);
                 newWord.addPageOccurrence(documentName);
