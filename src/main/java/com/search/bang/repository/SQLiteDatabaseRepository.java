@@ -7,12 +7,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.springframework.stereotype.Repository;
 
 import com.search.bang.model.PageOccurrences;
 import com.search.bang.model.Word;
 
+@Slf4j
 @Repository
 public class SQLiteDatabaseRepository implements DatabaseRepository {
 
@@ -45,11 +47,11 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
     public void init() {
 
         if (INITIALIZED) {
-            System.out.println("Database already initialized.");
+            log.debug("Database already initialized.");
             return;
         }
 
-        System.out.println("Initializing database...");
+        log.info("Initializing database...");
 
         INITIALIZED = true;
 
@@ -85,7 +87,7 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
 
         close();
 
-        System.out.println("Database initialized.");
+        log.info("Database initialized.");
     }
 
     public synchronized void upsertIndex(List<Word> index) {
@@ -250,7 +252,7 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
             }
         }
 
-        System.out.println("No exact match found for word: " + word + ". Closest match found: " + lowestDistanceWord);
+        log.info("No exact match found for word: {} Closest match found: {}", word, lowestDistanceWord);
         return lowestDistanceWord;
     }
 

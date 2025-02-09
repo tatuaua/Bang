@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,6 +14,7 @@ import com.search.bang.repository.DatabaseRepository;
 
 import static com.search.bang.util.Constants.STOP_WORDS;
 
+@Slf4j
 @Service
 public class IndexService {
 
@@ -23,7 +26,7 @@ public class IndexService {
 
     public void updateIndex(MultipartFile multipartFile) throws IOException {
 
-        System.out.println("Updating index with file: " + multipartFile.getOriginalFilename());
+        log.info("Updating index with file: {}", multipartFile.getOriginalFilename());
 
         String text = null;
 
@@ -68,6 +71,6 @@ public class IndexService {
         }
 
         databaseRepository.upsertIndex(wordList);
-        System.out.println("Index updated with file: " + multipartFile.getOriginalFilename());
+        log.info("Index updated with file: {}", multipartFile.getOriginalFilename());
     }
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.search.bang.model.Word;
 import com.search.bang.service.SearchService;
 
+@Slf4j
 @RestController
 @RequestMapping("/search")
 public class SearchController {
@@ -27,14 +29,14 @@ public class SearchController {
     @PostMapping()
     public ResponseEntity<?> search(@RequestParam List<String> q) throws IOException {
 
-        System.out.println("q: " + q);
+        log.info("Query received: {}", q);
 
         List<Word> result = new ArrayList<>();
 
         try {
             result = searchService.getTop5Documents(q);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error encountered while searching: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 

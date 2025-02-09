@@ -1,5 +1,6 @@
 package com.search.bang.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.search.bang.service.IndexService;
 
+@Slf4j
 @RestController
 @RequestMapping("/files")
 public class FileController {
@@ -28,11 +30,11 @@ public class FileController {
             return new ResponseEntity<>(HttpStatus.OK);
 
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            log.error("File processing error encountered while updating index: {}", e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error encountered while updating index: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
