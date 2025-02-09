@@ -14,30 +14,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          file: Dockerfile
-          push: false
-          tags: |
-            your-docker-registry/your-app-image:latest
-            your-docker-registry/your-app-image:${{ github.sha }} # Tag with commit SHA for traceability
-
-      - name: Run Docker Compose
-        uses: docker/compose-action@v2
-        with:
-          compose-version: '3.8'
-          command: up -d
-
-      - name: Wait for App to Start
+      - name: Build and run Docker image
         run: |
-          sleep 10 # Basic wait, replace with health check if your app exposes one
-          echo "Application should be running on port 8080"
-
-      - name: Stop Docker Compose
-        if: always() # Ensure cleanup even if other steps fail
-        uses: docker/compose-action@v2
-        with:
-          compose-version: '3.8'
-          command: down
+          docker build . --file Dockerfile
+          docker compose-up -d
