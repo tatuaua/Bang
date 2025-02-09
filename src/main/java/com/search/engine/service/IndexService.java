@@ -16,7 +16,7 @@ import static com.search.engine.util.Constants.STOP_WORDS;
 @Service
 public class IndexService {
 
-    DatabaseRepository databaseRepository;
+    private final DatabaseRepository databaseRepository;
 
     public IndexService(DatabaseRepository databaseRepository) {
         this.databaseRepository = databaseRepository;
@@ -25,7 +25,7 @@ public class IndexService {
     public void updateIndex(MultipartFile multipartFile) throws IOException {
 
         System.out.println("Updating index with file: " + multipartFile.getOriginalFilename());
-        
+
         String text = null;
 
         try {
@@ -37,9 +37,9 @@ public class IndexService {
         String documentName = multipartFile.getOriginalFilename();
 
         text = text.replace("\n", " ")
-                            .replaceAll("[^\\w\\s]", "")
-                            .replaceAll("\\s+", " ")
-                            .trim();
+                .replaceAll("[^\\w\\s]", "")
+                .replaceAll("\\s+", " ")
+                .trim();
 
         String[] words = text.split(" ");
 

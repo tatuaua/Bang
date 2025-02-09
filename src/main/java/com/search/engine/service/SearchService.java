@@ -12,7 +12,7 @@ import com.search.engine.repository.DatabaseRepository;
 @Service
 public class SearchService {
 
-    DatabaseRepository databaseRepository;
+    private final DatabaseRepository databaseRepository;
 
     public SearchService(DatabaseRepository databaseRepository) {
         this.databaseRepository = databaseRepository;
@@ -20,7 +20,7 @@ public class SearchService {
 
     public List<Word> getTop5Documents(List<String> words) {
         List<Word> result = new ArrayList<>();
-        for(String word : words) {
+        for (String word : words) {
             List<PageOccurrences> occurrences = databaseRepository.getTop5Documents(word, true);
             occurrences.sort((a, b) -> Integer.compare(b.getOccurrences(), a.getOccurrences()));
             Word newWord = new Word();

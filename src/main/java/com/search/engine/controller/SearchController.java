@@ -18,7 +18,7 @@ import com.search.engine.service.SearchService;
 @RequestMapping("/search")
 public class SearchController {
 
-    SearchService searchService;
+    private final SearchService searchService;
 
     public SearchController(SearchService searchService) {
         this.searchService = searchService;
@@ -38,7 +38,7 @@ public class SearchController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if(result.isEmpty()) {
+        if (result.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 

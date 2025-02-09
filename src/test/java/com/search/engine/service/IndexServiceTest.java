@@ -56,13 +56,13 @@ public class IndexServiceTest {
         ArgumentCaptor<List<Word>> captor = forClass(List.class);
 
         indexService.updateIndex(multipartFile);
-        
+
         verify(databaseRepository).upsertIndex(captor.capture());
 
         List<Word> capturedArgument = captor.getValue();
 
-        assert(capturedArgument.contains(word1));
-        assert(capturedArgument.contains(word2));
+        assert (capturedArgument.contains(word1));
+        assert (capturedArgument.contains(word2));
     }
 
     @Test
@@ -92,8 +92,8 @@ public class IndexServiceTest {
 
         List<Word> capturedArgument = captor.getValue();
 
-        assert(!capturedArgument.contains(wordThatShouldNotExist));
-        assert(capturedArgument.contains(wordThatShouldExist));
-        assert(capturedArgument.size() == 3);
+        assert (!capturedArgument.contains(wordThatShouldNotExist));
+        assert (capturedArgument.contains(wordThatShouldExist));
+        assert (capturedArgument.size() == 3);
     }
 }

@@ -20,20 +20,20 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
 
     private static final String DEFAULT_DB_PATH = "jdbc:sqlite:src/main/resources/index.db";
     private static final String ENV_DB_PATH = System.getenv("SPRING_DATASOURCE_URL");
-    private static final String URL = ENV_DB_PATH != null 
+    private static final String URL = ENV_DB_PATH != null
             ? ENV_DB_PATH
             : DEFAULT_DB_PATH;
 
     private static Connection connection;
-    
+
     private void open() {
         try {
-           connection = DriverManager.getConnection(URL);
+            connection = DriverManager.getConnection(URL);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-    
+
     public void close() {
         try {
             connection.close();
@@ -131,10 +131,10 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
     public void insertWordIfAbsent(String word) {
 
         String sql = String.format("""
-            INSERT INTO Words (word)
-            VALUES ('%s')
-            ON CONFLICT(word) DO NOTHING;
-            """, word);
+                INSERT INTO Words (word)
+                VALUES ('%s')
+                ON CONFLICT(word) DO NOTHING;
+                """, word);
         try {
             connection.createStatement().execute(sql);
         } catch (SQLException e) {
@@ -145,13 +145,13 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
     public void insertPageOccurrences(String word, String documentName, int occurrences) {
 
         String sql = String.format("""
-            INSERT INTO Occurrences (word_id, document_name, occurrences)
-            VALUES (
-                (SELECT word_id FROM Words WHERE word = '%s'),
-                '%s',
-                %d
-            );
-            """, word, documentName, occurrences);
+                INSERT INTO Occurrences (word_id, document_name, occurrences)
+                VALUES (
+                    (SELECT word_id FROM Words WHERE word = '%s'),
+                    '%s',
+                    %d
+                );
+                """, word, documentName, occurrences);
         try {
             connection.createStatement().execute(sql);
         } catch (SQLException e) {
@@ -161,20 +161,21 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
 
     public synchronized List<PageOccurrences> getTop5Documents(String word, boolean isOriginalWord) {
 
-        if (isOriginalWord && !wordExistsInDatabase(word)) { // If word doesnt exist in our index, search for the closest word and return its top 5 documents
+        if (isOriginalWord && !wordExistsInDatabase(word)) { // If word doesnt exist in our index, search for the
+                                                             // closest word and return its top 5 documents
             String lowestDistanceWord = getLowestDistanceWord(word);
             return getTop5Documents(lowestDistanceWord, false);
         }
 
         String sql = String.format("""
-            SELECT o.document_name, SUM(o.occurrences) AS total_occurrences
-            FROM Occurrences o
-            JOIN Words w ON o.word_id = w.word_id
-            WHERE w.word = '%s'
-            GROUP BY o.document_name
-            ORDER BY total_occurrences DESC
-            LIMIT 5;
-            """, word);
+                SELECT o.document_name, SUM(o.occurrences) AS total_occurrences
+                FROM Occurrences o
+                JOIN Words w ON o.word_id = w.word_id
+                WHERE w.word = '%s'
+                GROUP BY o.document_name
+                ORDER BY total_occurrences DESC
+                LIMIT 5;
+                """, word);
 
         List<PageOccurrences> result = new ArrayList<>();
 
@@ -183,7 +184,8 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
 
         try {
             while (resultSet.next()) {
-                result.add(new PageOccurrences(resultSet.getString("document_name"), resultSet.getInt("total_occurrences")));
+                result.add(new PageOccurrences(resultSet.getString("document_name"),
+                        resultSet.getInt("total_occurrences")));
             }
             close();
             return result;
@@ -193,12 +195,12 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
     }
 
     private boolean wordExistsInDatabase(String word) {
-        
+
         String sql = String.format("""
-            SELECT w.word
-            FROM Words w
-            WHERE w.word = '%s';
-            """, word);
+                SELECT w.word
+                FROM Words w
+                WHERE w.word = '%s';
+                """, word);
 
         open();
         ResultSet resultSet = executeQuery(sql);
@@ -216,9 +218,9 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
     private String getLowestDistanceWord(String word) {
 
         String sql = """
-            SELECT w.word
-            FROM Words w;
-            """;
+                SELECT w.word
+                FROM Words w;
+                """;
 
         List<String> words = new ArrayList<>();
 

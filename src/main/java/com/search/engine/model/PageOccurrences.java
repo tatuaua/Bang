@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PageOccurrences {
-    
+
     private String page;
     private int occurrences;
 }
