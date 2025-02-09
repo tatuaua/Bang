@@ -14,10 +14,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Build and run Docker image
+      - name: Build and run Docker container
         run: |
           docker build . --file Dockerfile
-          docker compose up -d  # Run in detached mode
+          docker compose up -d  # Start container in detached mode
 
-      - name: Stop and remove containers
-        run: docker compose down
+      - name: Print running containers
+        run: docker ps
+      - name: Keep workflow active for debugging (Optional)
+        run: sleep 10
+
