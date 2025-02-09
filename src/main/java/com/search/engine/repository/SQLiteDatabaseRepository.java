@@ -26,7 +26,7 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
 
     private static Connection connection;
     
-    private void connect() {
+    private void open() {
         try {
            connection = DriverManager.getConnection(URL);
         } catch (SQLException e) {
@@ -42,21 +42,16 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
         }
     }
 
-    public void open() {
-        connect();
-    }
-
     public void init() {
 
         if (INITIALIZED) {
+            System.out.println("Database already initialized.");
             return;
         }
 
         System.out.println("Initializing database...");
 
         INITIALIZED = true;
-
-        connect();
 
         String[] sqlStatements = {
             "DROP TABLE IF EXISTS Words;",
@@ -78,6 +73,8 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
             """
         };
 
+        open();
+
         try {
             for (String sql : sqlStatements) {
                 connection.createStatement().execute(sql);
@@ -86,9 +83,9 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
             throw new RuntimeException(e);
         }
 
-        System.out.println("Database initialized.");
-
         close();
+
+        System.out.println("Database initialized.");
     }
 
     public synchronized void upsertIndex(List<Word> index) {
@@ -145,13 +142,6 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
         }
     }
 
-    public void insertPageOccurrencesIfAbsent(String word, String documentName, int occurrences) {
-        
-        if (getPageOccurrences(word, documentName) == null) {
-            insertPageOccurrences(word, documentName, occurrences);
-        }
-    }
-
     public void insertPageOccurrences(String word, String documentName, int occurrences) {
 
         String sql = String.format("""
@@ -169,26 +159,12 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
         }
     }
 
-    public PageOccurrences getPageOccurrences(String word, String documentName) {
+    public synchronized List<PageOccurrences> getTop5Documents(String word, boolean isOriginalWord) {
 
-        String sql = String.format("""
-            SELECT occurrences
-            FROM Occurrences
-            WHERE word_id = (SELECT word_id FROM Words WHERE word = '%s')
-            AND document_name = '%s';
-            """, word, documentName);
-        try {
-            ResultSet resultSet = connection.createStatement().executeQuery(sql);
-            if (resultSet.next()) {
-                return new PageOccurrences(documentName, resultSet.getInt("occurrences"));
-            }
-            return null;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        if (isOriginalWord && !wordExistsInDatabase(word)) { // If word doesnt exist in our index, search for the closest word and return its top 5 documents
+            String lowestDistanceWord = getLowestDistanceWord(word);
+            return getTop5Documents(lowestDistanceWord, false);
         }
-    }
-
-    public List<PageOccurrences> getTop5Documents(String word) {
 
         String sql = String.format("""
             SELECT o.document_name, SUM(o.occurrences) AS total_occurrences
@@ -202,44 +178,39 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
 
         List<PageOccurrences> result = new ArrayList<>();
 
+        open();
+        ResultSet resultSet = executeQuery(sql);
+
         try {
-            ResultSet resultSet = connection.createStatement().executeQuery(sql);
-
-            if (!resultSet.isBeforeFirst()) {
-
-                if (IsDatabaseEmpty()) { // If database is empty, return empty list
-                    return result;
-                }
-
-                String lowestDistanceWord = getLowestDistanceWord(word); // If word doesnt exist in our index, search for the closest word and return its top 5 documents
-                return getTop5Documents(lowestDistanceWord);
-            }
-
             while (resultSet.next()) {
                 result.add(new PageOccurrences(resultSet.getString("document_name"), resultSet.getInt("total_occurrences")));
             }
+            close();
             return result;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private boolean IsDatabaseEmpty() {
+    private boolean wordExistsInDatabase(String word) {
+        
+        String sql = String.format("""
+            SELECT w.word
+            FROM Words w
+            WHERE w.word = '%s';
+            """, word);
 
-        String sql = """
-            SELECT COUNT(*) AS count
-            FROM Words;
-            """;
+        open();
+        ResultSet resultSet = executeQuery(sql);
 
         try {
-            ResultSet resultSet = connection.createStatement().executeQuery(sql);
-            if (resultSet.next()) {
-                return resultSet.getInt("count") == 0;
-            }
-            return true;
+            boolean result = resultSet.isBeforeFirst();
+            close();
+            return result;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     private String getLowestDistanceWord(String word) {
@@ -250,14 +221,19 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
             """;
 
         List<String> words = new ArrayList<>();
+
+        open();
+        ResultSet resultSet = executeQuery(sql);
+
         try {
-            ResultSet resultSet = connection.createStatement().executeQuery(sql);
             while (resultSet.next()) {
                 words.add(resultSet.getString("word"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        close();
 
         LevenshteinDistance levenshteinDistance = LevenshteinDistance.getDefaultInstance();
 
@@ -275,5 +251,13 @@ public class SQLiteDatabaseRepository implements DatabaseRepository {
         System.out.println("No exact match found for word: " + word + ". Closest match found: " + lowestDistanceWord);
         return lowestDistanceWord;
     }
-    
+
+    private ResultSet executeQuery(String sql) {
+        try {
+            ResultSet result = connection.createStatement().executeQuery(sql);
+            return result;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

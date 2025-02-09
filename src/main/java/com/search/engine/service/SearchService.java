@@ -20,16 +20,14 @@ public class SearchService {
 
     public List<Word> getTop5Documents(List<String> words) {
         List<Word> result = new ArrayList<>();
-        databaseRepository.open();
         for(String word : words) {
-            List<PageOccurrences> occurrences = databaseRepository.getTop5Documents(word);
+            List<PageOccurrences> occurrences = databaseRepository.getTop5Documents(word, true);
             occurrences.sort((a, b) -> Integer.compare(b.getOccurrences(), a.getOccurrences()));
             Word newWord = new Word();
             newWord.setWord(word);
             newWord.setPageOccurrences(occurrences);
             result.add(newWord);
         }
-        databaseRepository.close();
         return result;
     }
 }
