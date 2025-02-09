@@ -2,9 +2,9 @@ name: Build and run Spring Boot App
 
 on:
   push:
-    branches: [ "main" ] # Or your main branch name
+    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ] # Or your main branch name
+    branches: [ "main" ]
 
 jobs:
   build-and-run:
@@ -17,8 +17,10 @@ jobs:
       - name: Build and run Docker image
         run: |
           docker build . --file Dockerfile
-          docker compose up
+          docker compose up -d  # Run in detached mode
 
-      - name: Stop services
-        if: always()
-        run: docker-compose down
+      - name: Wait for application to start
+        run: sleep 20
+
+      - name: Stop and remove containers
+        run: docker compose down
