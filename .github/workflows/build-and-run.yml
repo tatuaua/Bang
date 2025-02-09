@@ -17,4 +17,4 @@ jobs:
       - name: Build and run Docker image
         run: |
           docker build . --file Dockerfile
-          docker compose-up -d
+          docker compose up
