@@ -31,7 +31,7 @@ public class SearchController {
 
         log.info("Query received: {}", q);
 
-        List<Word> result = new ArrayList<>();
+        List<Word> result;
 
         try {
             result = searchService.getTop5Documents(q);

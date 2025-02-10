@@ -6,6 +6,8 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,7 +30,7 @@ public class IndexService {
 
         log.info("Updating index with file: {}", multipartFile.getOriginalFilename());
 
-        String text = null;
+        String text;
 
         try {
             text = new String(multipartFile.getBytes());
@@ -47,9 +49,9 @@ public class IndexService {
 
         List<Word> wordList = new ArrayList<>();
 
-        for (int i = 0; i < words.length; i++) {
+        for (String s : words) {
 
-            String word = words[i].toLowerCase();
+            String word = s.toLowerCase();
 
             if (STOP_WORDS.contains(word)) {
                 continue;
