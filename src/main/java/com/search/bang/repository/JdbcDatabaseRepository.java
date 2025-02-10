@@ -85,7 +85,7 @@ public class JdbcDatabaseRepository implements DatabaseRepository {
         jdbcTemplate.batchUpdate(sql, occurrences, occurrences.size(), (ps, occurrence) -> {
             ps.setString(1, word);
             ps.setString(2, occurrence.getPage());
-            ps.setInt(3, occurrence.getOccurrences());
+            ps.setInt(3, occurrence.getAmount());
         });
     }
 

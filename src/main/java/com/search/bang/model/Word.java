@@ -24,7 +24,7 @@ public class Word {
         if (pageOccurrence == null) {
             pageOccurrences.add(new PageOccurrences(documentName, 1));
         } else {
-            pageOccurrence.setOccurrences(pageOccurrence.getOccurrences() + 1);
+            pageOccurrence.setAmount(pageOccurrence.getAmount() + 1);
         }
     }
 }

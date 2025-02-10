@@ -3,7 +3,6 @@ package com.search.bang.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.search.bang.model.PageOccurrences;
@@ -23,7 +22,7 @@ public class SearchService {
         List<Word> result = new ArrayList<>();
         for (String word : words) {
             List<PageOccurrences> occurrences = databaseRepository.getTop5Documents(word, true);
-            occurrences.sort((a, b) -> Integer.compare(b.getOccurrences(), a.getOccurrences()));
+            occurrences.sort((a, b) -> Integer.compare(b.getAmount(), a.getAmount()));
             Word newWord = new Word();
             newWord.setWord(word);
             newWord.setPageOccurrences(occurrences);
