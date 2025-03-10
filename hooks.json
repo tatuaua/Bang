@@ -1,0 +1,7 @@
+[
+  {
+    "id": "deploy",
+    "execute-command": "C:\\Coding\\bang\\deploy.ps1",
+    "command-working-directory": "C:\\Coding\\bang"
+  }
+]
