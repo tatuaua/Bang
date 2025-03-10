@@ -1,7 +1,17 @@
 [
   {
     "id": "deploy",
-    "execute-command": "C:\\Coding\\bang\\deploy.ps1",
-    "command-working-directory": "C:\\Coding\\bang"
+    "execute-command": "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "command-working-directory": "C:/Coding/bang",
+    "pass-arguments-to-command": [
+      {
+        "source": "string",
+        "name": "-File"
+      },
+      {
+        "source": "string",
+        "name": "deploy.ps1"
+      }
+    ]
   }
 ]

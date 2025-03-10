@@ -7,6 +7,7 @@ target/
 src/main/resources/input/*
 src/main/resources/index.db
 data/
+deploy.log
 
 ### STS ###
 .apt_generated
