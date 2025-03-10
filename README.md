@@ -4,7 +4,7 @@ This is a simple search engine built using Spring Boot. It indexes text files an
 
 ## Project structure
 
-This project tries to follow the MVC pattern
+This project tries to follow the MVC pattern.
 
 ```src/main/java/com/search/engine``` contains the back-end code
 
