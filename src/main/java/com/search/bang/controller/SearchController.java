@@ -1,7 +1,6 @@
 package com.search.bang.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
@@ -27,14 +26,20 @@ public class SearchController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> search(@RequestParam List<String> q) throws IOException {
-
+    public ResponseEntity<?> search(
+            @RequestParam(required = false) Boolean exact,
+            @RequestParam List<String> q
+    ) throws IOException {
         log.info("Query received: {}", q);
 
         List<Word> result;
 
         try {
-            result = searchService.getTop5Documents(q);
+            if (exact != null && exact) {
+                result = searchService.getTop5DocumentsExact(q);
+            } else {
+                result = searchService.getTop5DocumentsFuzzy(q);
+            }
         } catch (Exception e) {
             log.error("Error encountered while searching: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

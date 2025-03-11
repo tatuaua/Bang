@@ -29,7 +29,7 @@ public class JdbcDatabaseRepository implements DatabaseRepository {
             log.warn("Tried to init database twice");
         }
 
-        log.info("Initializing databse...");
+        log.info("Initializing database...");
 
         String[] sql = new String[]{
                 "DROP TABLE IF EXISTS Words;",
@@ -73,9 +73,7 @@ public class JdbcDatabaseRepository implements DatabaseRepository {
 
         String sql = "INSERT INTO Words (word) VALUES (?) ON CONFLICT(word) DO NOTHING";
 
-        jdbcTemplate.batchUpdate(sql, words, words.size(), (ps, word) -> {
-            ps.setString(1, word);
-        });
+        jdbcTemplate.batchUpdate(sql, words, words.size(), (ps, word) -> ps.setString(1, word));
     }
 
     private void batchInsertOccurrences(String word, List<PageOccurrences> occurrences) {
@@ -89,14 +87,18 @@ public class JdbcDatabaseRepository implements DatabaseRepository {
         });
     }
 
-    @Override
-    public List<PageOccurrences> getTop5Documents(String word, boolean isOriginalWord) {
+    public List<PageOccurrences> getTop5DocumentsFuzzy(String word) {
 
-        if (isOriginalWord && !wordExistsInDatabase(word)) {
+        if (!wordExistsInDatabase(word)) {
             // If word doesn't exist, search for the closest word and return its top 5 documents
             String lowestDistanceWord = getLowestDistanceWord(word);
-            return getTop5Documents(lowestDistanceWord, false);
+            return getTop5DocumentsExact(lowestDistanceWord);
         }
+
+        return getTop5DocumentsExact(word);
+    }
+
+    public List<PageOccurrences> getTop5DocumentsExact(String word) {
 
         String sql = """
                 SELECT o.document_name, SUM(o.occurrences) AS total_occurrences

@@ -129,7 +129,6 @@
                 }
 
                 let data = await response.json();
-
                 console.log("Response Data:", data);
 
                 if (!Array.isArray(data) || data.length === 0) {
@@ -141,7 +140,7 @@
 
                 results.innerHTML = "";
                 ranking.forEach((value, key) => {
-                    results.innerHTML += `${key} - ${value}\n`;
+                    results.innerHTML += `${key} - ${value}<br>`;
                 });
 
             } catch (error) {
@@ -156,7 +155,7 @@
             dataArray.forEach((data) => {
                 if (data.pageOccurrences && Array.isArray(data.pageOccurrences)) {
                     data.pageOccurrences.forEach((pageOccurrence) => {
-                        ranking.set(pageOccurrence.page, (ranking.get(pageOccurrence.page) || 0) + pageOccurrence.occurrences);
+                        ranking.set(pageOccurrence.page, (ranking.get(pageOccurrence.page) || 0) + pageOccurrence.amount);
                     });
                 }
             });
